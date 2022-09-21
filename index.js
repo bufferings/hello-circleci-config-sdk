@@ -27,7 +27,7 @@ config.addWorkflow(nodeWorkflow);
 
 nodeWorkflow.addJob(testJob);
 const wfDeployJob = new CircleCI.workflow.WorkflowJob(deployJob, {
-  requires: ["test"], filters: { branches: { ignore: [".*"] } }
+  requires: ["test"], filters: { branches: { ignore: ["/.*/"] } }
 });
 nodeWorkflow.jobs.push(wfDeployJob);
 
