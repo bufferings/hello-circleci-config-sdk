@@ -25,7 +25,8 @@ config.addJob(deployJob);
 const nodeWorkflow = new CircleCI.Workflow("node-test-deploy");
 config.addWorkflow(nodeWorkflow);
 
-nodeWorkflow.addJob(testJob);
+const wfTestJob = new CircleCI.workflow.WorkflowJob(testJob);
+nodeWorkflow.jobs.push(wfTestJob);
 const wfDeployJob = new CircleCI.workflow.WorkflowJob(deployJob, {
   requires: ["test"], filters: { branches: { ignore: ["/.*/"] } }
 });
@@ -35,7 +36,8 @@ nodeWorkflow.jobs.push(wfDeployJob);
  * Exports a CircleCI config for a node project
  */
 exports.writeNodeConfig = function (deployTag, configPath) {
-  wfDeployJob.parameters.filters.tags = { only: deployTag }
+  wfTestJob.parameters = { ...wfTestJob.parameters, filters: { tags: { only: deployTag } } };
+  wfDeployJob.parameters.filters.tags = { only: deployTag };
   fs.writeFile(configPath, config.stringify(), (err) => {
     if (err) console.error(err);
   })
