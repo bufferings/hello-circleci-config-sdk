@@ -1,0 +1,24 @@
+{
+  "name": "@bufferings/hello-circleci-config-sdk",
+  "version": "0.0.1",
+  "description": "Playing with [circleci-config-sdk-ts](https://github.com/CircleCI-Public/circleci-config-sdk-ts)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "bufferings",
+  "license": "ISC",
+  "dependencies": {
+    "@circleci/circleci-config-sdk": "^0.10.0"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bufferings/hello-circleci-config-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bufferings/hello-circleci-config-sdk/issues"
+  },
+  "homepage": "https://github.com/bufferings/hello-circleci-config-sdk#readme"
+}
