@@ -1,6 +1,6 @@
 {
   "name": "@bufferings/hello-circleci-config-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Playing with [circleci-config-sdk-ts](https://github.com/CircleCI-Public/circleci-config-sdk-ts)",
   "main": "index.js",
   "scripts": {
