@@ -1,29 +1,29 @@
 const CircleCI = require("@circleci/circleci-config-sdk");
 const fs = require('fs');
 
-const config = new CircleCI.Config();
+const nodeConfig = new CircleCI.Config();
 
 // Node executor
 const dockerNode = new CircleCI.executors
   .DockerExecutor("cimg/node:lts")
   .toReusable("docker-node");
-config.addReusableExecutor(dockerNode);
+nodeConfig.addReusableExecutor(dockerNode);
 
 // Test Job
 const testJob = new CircleCI.Job("test", dockerNode.reuse());
 testJob.addStep(new CircleCI.commands.Checkout());
 testJob.addStep(new CircleCI.commands.Run({ command: "npm install && npm run test" }));
-config.addJob(testJob);
+nodeConfig.addJob(testJob);
 
-//Deploy Job
+// Deploy Job
 const deployJob = new CircleCI.Job("deploy", dockerNode.reuse());
 deployJob.addStep(new CircleCI.commands.Checkout());
 deployJob.addStep(new CircleCI.commands.Run({ command: "npm run deploy" }));
-config.addJob(deployJob);
+nodeConfig.addJob(deployJob);
 
 // Workflow
 const nodeWorkflow = new CircleCI.Workflow("node-test-deploy");
-config.addWorkflow(nodeWorkflow);
+nodeConfig.addWorkflow(nodeWorkflow);
 
 const wfTestJob = new CircleCI.workflow.WorkflowJob(testJob);
 nodeWorkflow.jobs.push(wfTestJob);
@@ -35,10 +35,12 @@ nodeWorkflow.jobs.push(wfDeployJob);
 /**
  * Exports a CircleCI config for a node project
  */
-exports.writeNodeConfig = function (deployTag, configPath) {
-  wfTestJob.parameters = { ...wfTestJob.parameters, filters: { tags: { only: deployTag } } };
+module.exports = function writeNodeConfig(deployTag, configPath) {
+  wfTestJob.parameters = {
+    ...wfTestJob.parameters, filters: { tags: { only: deployTag } }
+  };
   wfDeployJob.parameters.filters.tags = { only: deployTag };
-  fs.writeFile(configPath, config.stringify(), (err) => {
+  fs.writeFile(configPath, nodeConfig.stringify(), (err) => {
     if (err) console.error(err);
   })
 }
